@@ -1,0 +1,14 @@
+# Usamos Python 3.10 como base
+FROM python:3.10
+
+# Establecemos la carpeta de trabajo en el contenedor
+WORKDIR /app
+
+# Copiamos los archivos de la app a la carpeta de trabajo
+COPY . /app
+
+# Instalamos las dependencias de Python (si tienes un requirements.txt)
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Comando por defecto al iniciar el contenedor
+CMD ["python", "app.py"]

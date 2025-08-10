@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  selenium-hub:
+    image: selenium/hub:4.21.0
+    ports:
+      - "4444:4444"
+    networks:
+      - selenium-net
+
+  chrome:
+    image: selenium/node-chrome:4.21.0
+    shm_size: 2gb              # Para evitar errores de memoria con Chrome
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    networks:
+      - selenium-net
+
+  app:
+    build: ./app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+    depends_on:
+      - selenium-hub
+      - chrome
+    networks:
+      - selenium-net
+
+  pytest-tests:
+    build: ./test
+    depends_on:
+      - app
+      - selenium-hub
+    environment:
+      - SELENIUM_REMOTE_URL=http://selenium-hub:4444/wd/hub
+    networks:
+      - selenium-net
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - selenium-net
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - selenium-net
+
+  portainer:
+    image: portainer/portainer-ce
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - selenium-net
+
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin
+      - OPENAI_API_KEY=grupocinco
+    networks:
+      - selenium-net
+
+networks:
+  selenium-net:
+    driver: bridge
+
+volumes:
+  grafana_data:
+  portainer_data:
