@@ -76,18 +76,34 @@ Se ejecuta al hacer push o pull request a `main`:
 - Docker y Docker Compose
 - Cuenta en GitHub (para CI/CD)
 
-### Pasos
-```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/selenium-docker-testing.git
-cd selenium-docker-testing
 
-# Construir y levantar contenedores
-docker-compose up --build -d
+# Problema
+Queremos automatizar pruebas de una aplicación web para validar que funciona correctamente, y hacer todo esto usando herramientas modernas.
+## Objetivo
+Crear una Prueba de Concepto que incluya:
+- Automatización de pruebas con Selenium.
+- Empaquetado con Docker y Docker Compose.
+- Integración continua con GitHub Actions.
+- Monitoreo con Prometheus y Grafana.
+- Administración con Portainer.
+- Automatización con n8n e integración con OpenAI para análisis inteligente.
 
-# Ejecutar pruebas manualmente (opcional)
-docker-compose run --rm tests
+## Plan de trabajo
+1. Planificar: Crear tareas (issues) y documentar el proyecto.
+2. Desarrollar: Escribir los scripts de automatización y configuraciones.
+3. Integrar: Automatizar pruebas y despliegues con GitHub Actions.
+4. Probar: Validar el funcionamiento con pruebas automatizadas.
+5. Lanzar: Desplegar con Docker y Docker Compose.
+6. Operar: Administrar contenedores con Portainer.
+7. Observar: Monitorear logs y métricas con Prometheus y Grafana.
+8. IA integrada: Analizar logs y automatizar tareas con n8n y OpenAI.
 
-# Detener y limpiar
-docker-compose down --volumes --remove-orphans
+## Estructura del proyecto
+- `/app`: Código de la aplicación web.
+- `/test`: Pruebas automatizadas con Selenium.
+- `/monitoring`: Configuración de Prometheus.
+- `docker-compose.yml`: Definición de los contenedores Docker.
+- `.github/workflows/ci.yml`: Pipeline de CI con GitHub Actions.
+
+
 
